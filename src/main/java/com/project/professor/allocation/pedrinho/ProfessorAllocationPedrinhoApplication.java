@@ -8,6 +8,6 @@ public class ProfessorAllocationPedrinhoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProfessorAllocationPedrinhoApplication.class, args);
-	} // comentário dev 1
+	} // comentário dev 2
 
 }
