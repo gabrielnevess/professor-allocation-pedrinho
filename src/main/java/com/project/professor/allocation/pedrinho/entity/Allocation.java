@@ -30,5 +30,5 @@ public class Allocation {
     private Professor professor;
 
     @ManyToOne(optional = false)
-    private Course course;
+    private Course course;
 }

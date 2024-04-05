@@ -21,5 +21,5 @@ public class Professor {
     private String cpf;
 
     @ManyToOne
-    private Department department;
+    private Department department;
 }
