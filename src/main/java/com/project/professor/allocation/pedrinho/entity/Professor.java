@@ -20,6 +20,6 @@ public class Professor {
     @Column(name = "cpf", unique = true, nullable = false, length = 11)
     private String cpf;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Department department;
 }
