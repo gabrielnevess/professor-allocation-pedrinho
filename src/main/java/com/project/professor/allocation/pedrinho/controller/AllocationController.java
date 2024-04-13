@@ -107,7 +107,7 @@ public class AllocationController {
 
     @Operation(summary = "Delete all allocation")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "No Content"),
+            @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @DeleteMapping
