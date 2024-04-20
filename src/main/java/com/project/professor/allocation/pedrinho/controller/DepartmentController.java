@@ -1,7 +1,6 @@
 package com.project.professor.allocation.pedrinho.controller;
 
 import com.project.professor.allocation.pedrinho.entity.Department;
-import com.project.professor.allocation.pedrinho.exception.ProfessorAllocationException;
 import com.project.professor.allocation.pedrinho.service.DepartmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,7 +29,7 @@ public class DepartmentController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Department>> findAll(@RequestParam(name = "name", required = false) String name) {
-        return new ResponseEntity<>(departmentService.findAll(name), HttpStatus.OK);
+        return new ResponseEntity<>(this.departmentService.findAll(name), HttpStatus.OK);
     }
 
     @Operation(summary = "Find a department")
@@ -40,8 +39,8 @@ public class DepartmentController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
     @GetMapping(path = "/{department_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Department> findById(@PathVariable(name = "department_id") Long id) throws ProfessorAllocationException {
-        return new ResponseEntity<>(departmentService.findById(id), HttpStatus.OK);
+    public ResponseEntity<Department> findById(@PathVariable(name = "department_id") Long id) {
+        return new ResponseEntity<>(this.departmentService.findById(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Save a department")
@@ -52,7 +51,7 @@ public class DepartmentController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Department> save(@RequestBody Department department) {
         try {
-            return new ResponseEntity<>(departmentService.save(department), HttpStatus.OK);
+            return new ResponseEntity<>(this.departmentService.save(department), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
@@ -68,7 +67,7 @@ public class DepartmentController {
     public ResponseEntity<Department> update(@PathVariable(name = "department_id") Long id,
                                              @RequestBody Department department) {
         try {
-            return new ResponseEntity<>(departmentService.update(department, id), HttpStatus.OK);
+            return new ResponseEntity<>(this.departmentService.update(department, id), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
@@ -80,8 +79,18 @@ public class DepartmentController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @DeleteMapping(path = "/{department_id}")
-    public ResponseEntity<Void> deleteById(@PathVariable(name = "department_id") Long id) throws ProfessorAllocationException {
-        departmentService.deleteById(id);
+    public ResponseEntity<Void> deleteById(@PathVariable(name = "department_id") Long id) {
+        this.departmentService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Operation(summary = "Delete all departments")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No Content"),
+    })
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAll() {
+        this.departmentService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

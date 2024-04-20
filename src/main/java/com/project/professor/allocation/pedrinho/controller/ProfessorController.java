@@ -1,8 +1,6 @@
 package com.project.professor.allocation.pedrinho.controller;
 
-import com.project.professor.allocation.pedrinho.entity.Department;
 import com.project.professor.allocation.pedrinho.entity.Professor;
-import com.project.professor.allocation.pedrinho.exception.ProfessorAllocationException;
 import com.project.professor.allocation.pedrinho.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,7 +29,7 @@ public class ProfessorController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Professor>> findAll(@RequestParam(name = "name", required = false) String name) {
-        return new ResponseEntity<>(professorService.findAll(name), HttpStatus.OK);
+        return new ResponseEntity<>(this.professorService.findAll(name), HttpStatus.OK);
     }
 
     @Operation(summary = "Find a professor")
@@ -41,8 +39,8 @@ public class ProfessorController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
     @GetMapping(path = "/{professor_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Professor> findById(@PathVariable(name = "professor_id") Long id) throws ProfessorAllocationException {
-        return new ResponseEntity<>(professorService.findById(id), HttpStatus.OK);
+    public ResponseEntity<Professor> findById(@PathVariable(name = "professor_id") Long id) {
+        return new ResponseEntity<>(this.professorService.findById(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Find all professor with department")
@@ -51,9 +49,9 @@ public class ProfessorController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
-    @GetMapping(path = "/{department_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/department/{department_id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Professor>> findByDepartment(@PathVariable(name = "department_id") Long id) {
-        return new ResponseEntity<>(professorService.findByDepartment(id), HttpStatus.OK);
+        return new ResponseEntity<>(this.professorService.findByDepartment(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Save a professor")
@@ -64,7 +62,7 @@ public class ProfessorController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Professor> save(@RequestBody Professor professor) {
         try {
-            return new ResponseEntity<>(professorService.save(professor), HttpStatus.OK);
+            return new ResponseEntity<>(this.professorService.save(professor), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
@@ -80,7 +78,7 @@ public class ProfessorController {
     public ResponseEntity<Professor> update(@PathVariable(name = "professor_id") Long id,
                                             @RequestBody Professor professor) {
         try {
-            return new ResponseEntity<>(professorService.update(professor, id), HttpStatus.OK);
+            return new ResponseEntity<>(this.professorService.update(professor, id), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
@@ -92,8 +90,18 @@ public class ProfessorController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @DeleteMapping(path = "/{professor_id}")
-    public ResponseEntity<Void> deleteById(@PathVariable(name = "professor_id") Long id) throws ProfessorAllocationException {
-        professorService.deleteById(id);
+    public ResponseEntity<Void> deleteById(@PathVariable(name = "professor_id") Long id) {
+        this.professorService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Operation(summary = "Delete all professors")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No Content"),
+    })
+    @DeleteMapping
+    public ResponseEntity<Void> deleteById() {
+        this.professorService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
