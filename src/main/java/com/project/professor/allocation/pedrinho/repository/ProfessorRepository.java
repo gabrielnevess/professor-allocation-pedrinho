@@ -1,10 +1,9 @@
 package com.project.professor.allocation.pedrinho.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.project.professor.allocation.pedrinho.entity.Department;
 import com.project.professor.allocation.pedrinho.entity.Professor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

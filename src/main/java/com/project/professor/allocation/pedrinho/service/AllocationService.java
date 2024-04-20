@@ -3,10 +3,9 @@ package com.project.professor.allocation.pedrinho.service;
 import com.project.professor.allocation.pedrinho.entity.Allocation;
 import com.project.professor.allocation.pedrinho.entity.Course;
 import com.project.professor.allocation.pedrinho.entity.Professor;
-import com.project.professor.allocation.pedrinho.exception.ProfessorAllocationException;
+import com.project.professor.allocation.pedrinho.exception.NotFoundException;
 import com.project.professor.allocation.pedrinho.repository.AllocationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +18,11 @@ public class AllocationService {
     private final ProfessorService professorService;
     private final CourseService courseService;
 
-    public Allocation save(Allocation allocation) throws ProfessorAllocationException {
+    public Allocation save(Allocation allocation) {
         return this.saveInternal(allocation);
     }
 
-    public Allocation update(Allocation allocation, Long allocationId) throws ProfessorAllocationException {
+    public Allocation update(Allocation allocation, Long allocationId) {
         allocation.setId(allocationId);
         return this.saveInternal(allocation);
     }
@@ -40,7 +39,7 @@ public class AllocationService {
         return allocationRepository.findByProfessor(professor);
     }
 
-    public void deleteById(Long allocationId) throws ProfessorAllocationException {
+    public void deleteById(Long allocationId) {
         Allocation allocation = this.findById(allocationId);
         this.allocationRepository.deleteById(allocation.getId());
     }
@@ -49,10 +48,10 @@ public class AllocationService {
         allocationRepository.deleteAllInBatch();
     }
 
-    public Allocation findById(Long allocationId) throws ProfessorAllocationException {
+    public Allocation findById(Long allocationId) {
         return this.allocationRepository
                 .findById(allocationId)
-                .orElseThrow(() -> new ProfessorAllocationException(HttpStatus.NOT_FOUND, String.format("Allocation not found with id :: %d", allocationId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Allocation not found with id :: %d", allocationId)));
 
     }
 
@@ -60,11 +59,11 @@ public class AllocationService {
         return this.allocationRepository.findAll();
     }
 
-    private Allocation saveInternal(Allocation allocation) throws ProfessorAllocationException {
+    private Allocation saveInternal(Allocation allocation) {
         Professor professor = this.professorService.findById(allocation.getProfessor().getId());
         Course course = this.courseService.findById(allocation.getCourse().getId());
 
-        if(!isEndHourGreaterThanStartHour(allocation) || hasCollision(allocation)) {
+        if (!isEndHourGreaterThanStartHour(allocation) || hasCollision(allocation)) {
             throw new RuntimeException();
         }
 
@@ -75,6 +74,9 @@ public class AllocationService {
             return allocation;
         } else {
             Allocation alloc = this.findById(allocation.getId());
+            alloc.setEndHour(allocation.getEndHour());
+            alloc.setStartHour(allocation.getStartHour());
+            alloc.setDayOfWeek(allocation.getDayOfWeek());
             alloc.setProfessor(professor);
             alloc.setCourse(course);
             this.allocationRepository.save(alloc);

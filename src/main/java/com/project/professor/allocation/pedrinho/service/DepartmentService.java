@@ -1,10 +1,9 @@
 package com.project.professor.allocation.pedrinho.service;
 
 import com.project.professor.allocation.pedrinho.entity.Department;
-import com.project.professor.allocation.pedrinho.exception.ProfessorAllocationException;
+import com.project.professor.allocation.pedrinho.exception.NotFoundException;
 import com.project.professor.allocation.pedrinho.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,36 +14,40 @@ import java.util.Objects;
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
-    public Department save(Department department) throws ProfessorAllocationException {
+    public Department save(Department department) {
         return this.saveInternal(department);
     }
 
-    public Department update(Department department, Long departmentId) throws ProfessorAllocationException {
+    public Department update(Department department, Long departmentId) {
         department.setId(departmentId);
         return this.saveInternal(department);
     }
 
-    public void deleteById(Long departmentId) throws ProfessorAllocationException {
+    public void deleteById(Long departmentId) {
         Department department = this.findById(departmentId);
         this.departmentRepository.deleteById(department.getId());
     }
 
-    public Department findById(Long department) throws ProfessorAllocationException {
+    public void deleteAll() {
+        this.departmentRepository.deleteAllInBatch();
+    }
+
+    public Department findById(Long department) {
         return this.departmentRepository
                 .findById(department)
-                .orElseThrow(() -> new ProfessorAllocationException(HttpStatus.NOT_FOUND, String.format("Departamento não encontrado com o id :: %d", department)));
+                .orElseThrow(() -> new NotFoundException(String.format("Department not found with id :: %d", department)));
 
     }
 
     public List<Department> findAll(String name) {
-        if(Objects.nonNull(name)) {
+        if (Objects.nonNull(name)) {
             return this.departmentRepository.findByNameContainingIgnoreCase(name);
         } else {
             return this.departmentRepository.findAll();
         }
     }
 
-    private Department saveInternal(Department department) throws ProfessorAllocationException {
+    private Department saveInternal(Department department) {
         if (Objects.isNull(department.getId())) {
             return this.departmentRepository.save(department);
         } else {

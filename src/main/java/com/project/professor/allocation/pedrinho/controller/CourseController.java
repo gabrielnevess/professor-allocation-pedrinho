@@ -1,7 +1,6 @@
 package com.project.professor.allocation.pedrinho.controller;
 
 import com.project.professor.allocation.pedrinho.entity.Course;
-import com.project.professor.allocation.pedrinho.exception.ProfessorAllocationException;
 import com.project.professor.allocation.pedrinho.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,7 +29,7 @@ public class CourseController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Course>> findAll(@RequestParam(name = "name", required = false) String name) {
-        return new ResponseEntity<>(courseService.findAll(name), HttpStatus.OK);
+        return new ResponseEntity<>(this.courseService.findAll(name), HttpStatus.OK);
     }
 
     @Operation(summary = "Find a course")
@@ -40,8 +39,8 @@ public class CourseController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
     @GetMapping(path = "/{course_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Course> findById(@PathVariable(name = "course_id") Long id) throws ProfessorAllocationException {
-        return new ResponseEntity<>(courseService.findById(id), HttpStatus.OK);
+    public ResponseEntity<Course> findById(@PathVariable(name = "course_id") Long id) {
+        return new ResponseEntity<>(this.courseService.findById(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Save a course")
@@ -52,7 +51,7 @@ public class CourseController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Course> save(@RequestBody Course course) {
         try {
-            return new ResponseEntity<>(courseService.save(course), HttpStatus.OK);
+            return new ResponseEntity<>(this.courseService.save(course), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
@@ -68,7 +67,7 @@ public class CourseController {
     public ResponseEntity<Course> update(@PathVariable(name = "course_id") Long id,
                                          @RequestBody Course course) {
         try {
-            return new ResponseEntity<>(courseService.update(course, id), HttpStatus.OK);
+            return new ResponseEntity<>(this.courseService.update(course, id), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
@@ -80,8 +79,18 @@ public class CourseController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @DeleteMapping(path = "/{course_id}")
-    public ResponseEntity<Void> deleteById(@PathVariable(name = "course_id") Long id) throws ProfessorAllocationException {
-        courseService.deleteById(id);
+    public ResponseEntity<Void> deleteById(@PathVariable(name = "course_id") Long id) {
+        this.courseService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Operation(summary = "Delete all courses")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No Content"),
+    })
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAll() {
+        this.courseService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

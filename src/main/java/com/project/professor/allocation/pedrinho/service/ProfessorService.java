@@ -2,10 +2,9 @@ package com.project.professor.allocation.pedrinho.service;
 
 import com.project.professor.allocation.pedrinho.entity.Department;
 import com.project.professor.allocation.pedrinho.entity.Professor;
-import com.project.professor.allocation.pedrinho.exception.ProfessorAllocationException;
+import com.project.professor.allocation.pedrinho.exception.NotFoundException;
 import com.project.professor.allocation.pedrinho.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +16,11 @@ public class ProfessorService {
     private final ProfessorRepository professorRepository;
     private final DepartmentService departmentService;
 
-    public Professor save(Professor professor) throws ProfessorAllocationException {
+    public Professor save(Professor professor) {
         return this.saveInternal(professor);
     }
 
-    public Professor update(Professor professor, Long professorId) throws ProfessorAllocationException {
+    public Professor update(Professor professor, Long professorId) {
         professor.setId(professorId);
         return this.saveInternal(professor);
     }
@@ -32,15 +31,19 @@ public class ProfessorService {
         return professorRepository.findByDepartment(department);
     }
 
-    public void deleteById(Long professorId) throws ProfessorAllocationException {
+    public void deleteById(Long professorId) {
         Professor professor = this.findById(professorId);
         this.professorRepository.deleteById(professor.getId());
     }
 
-    public Professor findById(Long professor) throws ProfessorAllocationException {
+    public void deleteAll() {
+        this.professorRepository.deleteAllInBatch();
+    }
+
+    public Professor findById(Long professor) {
         return this.professorRepository
                 .findById(professor)
-                .orElseThrow(() -> new ProfessorAllocationException(HttpStatus.NOT_FOUND, String.format("Professor not found with id :: %d", professor)));
+                .orElseThrow(() -> new NotFoundException(String.format("Professor not found with id :: %d", professor)));
     }
 
     public List<Professor> findAll(String name) {
@@ -51,7 +54,7 @@ public class ProfessorService {
         }
     }
 
-    private Professor saveInternal(Professor professor) throws ProfessorAllocationException {
+    private Professor saveInternal(Professor professor) {
         Department department = departmentService.findById(professor.getDepartment().getId());
 
         if (Objects.isNull(professor.getId())) {
@@ -61,6 +64,7 @@ public class ProfessorService {
         } else {
             Professor prof = this.findById(professor.getId());
             prof.setName(professor.getName());
+            prof.setCpf(professor.getCpf());
             prof.setDepartment(department);
             this.professorRepository.save(prof);
             return prof;
