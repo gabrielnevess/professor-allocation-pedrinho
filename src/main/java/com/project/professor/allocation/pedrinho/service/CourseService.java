@@ -19,6 +19,10 @@ public class CourseService {
     }
 
     public Course update(Course course, Long courseId) {
+    	if (Objects.isNull(courseId) || !courseRepository.existsById(courseId)) {
+    		throw new NotFoundException(String.format("Course not found with id :: %d", courseId));
+    	}
+
         course.setId(courseId);
         return this.saveInternal(course);
     }

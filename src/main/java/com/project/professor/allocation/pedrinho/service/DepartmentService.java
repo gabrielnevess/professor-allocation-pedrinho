@@ -19,6 +19,10 @@ public class DepartmentService {
     }
 
     public Department update(Department department, Long departmentId) {
+    	if (Objects.isNull(departmentId) || !departmentRepository.existsById(departmentId)) {
+    		throw new NotFoundException(String.format("Department not found with id :: %d", departmentId));
+    	}
+
         department.setId(departmentId);
         return this.saveInternal(department);
     }
