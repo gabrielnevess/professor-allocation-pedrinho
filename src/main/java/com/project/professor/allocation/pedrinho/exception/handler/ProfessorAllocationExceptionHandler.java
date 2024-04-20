@@ -2,6 +2,7 @@ package com.project.professor.allocation.pedrinho.exception.handler;
 
 import com.project.professor.allocation.pedrinho.exception.NotFoundException;
 import org.apache.coyote.BadRequestException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -33,5 +34,12 @@ public class ProfessorAllocationExceptionHandler extends ResponseEntityException
         ErrorResponseExceptionHandler errorResponseExceptionHandler = new ErrorResponseExceptionHandler(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(errorResponseExceptionHandler, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handlerDataIntegrityViolationException(DataIntegrityViolationException exception, WebRequest webRequest) {
+        ErrorResponseExceptionHandler errorResponseExceptionHandler = new ErrorResponseExceptionHandler(new Date(), exception.getMessage(),
+                webRequest.getDescription(false));
+        return new ResponseEntity<>(errorResponseExceptionHandler, HttpStatus.BAD_REQUEST);
     }
 }

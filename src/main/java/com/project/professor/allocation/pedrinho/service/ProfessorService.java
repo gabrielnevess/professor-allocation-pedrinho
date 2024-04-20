@@ -21,6 +21,10 @@ public class ProfessorService {
     }
 
     public Professor update(Professor professor, Long professorId) {
+    	if (Objects.isNull(professorId) || !professorRepository.existsById(professorId)) {
+    		throw new NotFoundException(String.format("Professor not found with id :: %d", professorId));
+    	}
+
         professor.setId(professorId);
         return this.saveInternal(professor);
     }

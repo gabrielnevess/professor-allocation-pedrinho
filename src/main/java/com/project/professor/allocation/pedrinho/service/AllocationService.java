@@ -23,6 +23,10 @@ public class AllocationService {
     }
 
     public Allocation update(Allocation allocation, Long allocationId) {
+    	if (Objects.isNull(allocationId) || !allocationRepository.existsById(allocationId)) {
+    		throw new NotFoundException(String.format("Allocation not found with id :: %d", allocationId));
+    	}
+
         allocation.setId(allocationId);
         return this.saveInternal(allocation);
     }

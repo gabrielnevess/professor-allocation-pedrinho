@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -61,11 +60,7 @@ public class ProfessorController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Professor> save(@RequestBody Professor professor) {
-        try {
-            return new ResponseEntity<>(this.professorService.save(professor), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    	return new ResponseEntity<>(this.professorService.save(professor), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update a professor")
@@ -77,11 +72,7 @@ public class ProfessorController {
     @PutMapping(path = "/{professor_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Professor> update(@PathVariable(name = "professor_id") Long id,
                                             @RequestBody Professor professor) {
-        try {
-            return new ResponseEntity<>(this.professorService.update(professor, id), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    	return new ResponseEntity<>(this.professorService.update(professor, id), HttpStatus.OK);
     }
 
     @Operation(summary = "Delete a professor")
