@@ -78,14 +78,13 @@ public class AllocationService {
             return allocation;
         }
 
-        Allocation alloc = this.findById(allocation.getId());
-        alloc.setEndHour(allocation.getEndHour());
-        alloc.setStartHour(allocation.getStartHour());
-        alloc.setDayOfWeek(allocation.getDayOfWeek());
-        alloc.setProfessor(professor);
-        alloc.setCourse(course);
-        this.allocationRepository.save(alloc);
-        return alloc;
+        allocation.setEndHour(allocation.getEndHour());
+        allocation.setStartHour(allocation.getStartHour());
+        allocation.setDayOfWeek(allocation.getDayOfWeek());
+        allocation.setProfessor(professor);
+        allocation.setCourse(course);
+        this.allocationRepository.save(allocation);
+        return allocation;
     }
 
     private boolean isEndHourGreaterThanStartHour(Allocation allocation) {
