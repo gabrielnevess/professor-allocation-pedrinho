@@ -43,7 +43,7 @@ public class ProfessorController {
         return new ResponseEntity<>(this.professorService.findById(id), HttpStatus.OK);
     }
 
-    @Operation(summary = "Find all professor with department")
+    @Operation(summary = "Find all professor by department")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
