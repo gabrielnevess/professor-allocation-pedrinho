@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +26,9 @@ public class DepartmentController {
             @ApiResponse(responseCode = "200", description = "OK")
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Department>> findAll(@RequestParam(name = "name", required = false) String name) {
-        return new ResponseEntity<>(this.departmentService.findAll(name), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<Department> findAll(@RequestParam(name = "name", required = false) String name) {
+        return this.departmentService.findAll(name);
     }
 
     @Operation(summary = "Find a department")
@@ -38,8 +38,9 @@ public class DepartmentController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
     @GetMapping(path = "/{department_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Department> findById(@PathVariable(name = "department_id") Long id) {
-        return new ResponseEntity<>(this.departmentService.findById(id), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public Department findById(@PathVariable(name = "department_id") Long id) {
+        return this.departmentService.findById(id);
     }
 
     @Operation(summary = "Save a department")
@@ -48,8 +49,9 @@ public class DepartmentController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Department> save(@RequestBody Department department) {
-    	return new ResponseEntity<>(this.departmentService.save(department), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Department save(@RequestBody Department department) {
+        return this.departmentService.save(department);
     }
 
     @Operation(summary = "Update a department")
@@ -59,9 +61,9 @@ public class DepartmentController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
     @PutMapping(path = "/{department_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Department> update(@PathVariable(name = "department_id") Long id,
-                                             @RequestBody Department department) {
-    	return new ResponseEntity<>(this.departmentService.update(department, id), HttpStatus.OK);
+    public Department update(@PathVariable(name = "department_id") Long id,
+                             @RequestBody Department department) {
+        return this.departmentService.update(department, id);
     }
 
     @Operation(summary = "Delete a department")
@@ -70,9 +72,9 @@ public class DepartmentController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @DeleteMapping(path = "/{department_id}")
-    public ResponseEntity<Void> deleteById(@PathVariable(name = "department_id") Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable(name = "department_id") Long id) {
         this.departmentService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Operation(summary = "Delete all departments")
@@ -80,8 +82,8 @@ public class DepartmentController {
             @ApiResponse(responseCode = "204", description = "No Content"),
     })
     @DeleteMapping
-    public ResponseEntity<Void> deleteAll() {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAll() {
         this.departmentService.deleteAll();
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

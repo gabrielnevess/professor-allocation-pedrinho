@@ -19,9 +19,9 @@ public class DepartmentService {
     }
 
     public Department update(Department department, Long departmentId) {
-    	if (Objects.isNull(departmentId) || !departmentRepository.existsById(departmentId)) {
-    		throw new NotFoundException(String.format("Department not found with id :: %d", departmentId));
-    	}
+        if (Objects.isNull(departmentId) || !this.departmentRepository.existsById(departmentId)) {
+            throw new NotFoundException(String.format("Department not found with id :: %d", departmentId));
+        }
 
         department.setId(departmentId);
         return this.saveInternal(department);
@@ -46,18 +46,18 @@ public class DepartmentService {
     public List<Department> findAll(String name) {
         if (Objects.nonNull(name)) {
             return this.departmentRepository.findByNameContainingIgnoreCase(name);
-        } else {
-            return this.departmentRepository.findAll();
         }
+
+        return this.departmentRepository.findAll();
     }
 
     private Department saveInternal(Department department) {
         if (Objects.isNull(department.getId())) {
             return this.departmentRepository.save(department);
-        } else {
-            Department dpt = this.findById(department.getId());
-            dpt.setName(department.getName());
-            return this.departmentRepository.save(dpt);
         }
+
+        Department dpt = this.findById(department.getId());
+        dpt.setName(department.getName());
+        return this.departmentRepository.save(dpt);
     }
 }

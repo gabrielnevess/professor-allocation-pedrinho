@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +26,9 @@ public class CourseController {
             @ApiResponse(responseCode = "200", description = "OK")
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Course>> findAll(@RequestParam(name = "name", required = false) String name) {
-        return new ResponseEntity<>(this.courseService.findAll(name), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<Course> findAll(@RequestParam(name = "name", required = false) String name) {
+        return this.courseService.findAll(name);
     }
 
     @Operation(summary = "Find a course")
@@ -38,8 +38,9 @@ public class CourseController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
     @GetMapping(path = "/{course_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Course> findById(@PathVariable(name = "course_id") Long id) {
-        return new ResponseEntity<>(this.courseService.findById(id), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public Course findById(@PathVariable(name = "course_id") Long id) {
+        return this.courseService.findById(id);
     }
 
     @Operation(summary = "Save a course")
@@ -48,8 +49,9 @@ public class CourseController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Course> save(@RequestBody Course course) {
-    	return new ResponseEntity<>(this.courseService.save(course), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Course save(@RequestBody Course course) {
+        return this.courseService.save(course);
     }
 
     @Operation(summary = "Update a course")
@@ -59,9 +61,10 @@ public class CourseController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
     @PutMapping(path = "/{course_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Course> update(@PathVariable(name = "course_id") Long id,
-                                         @RequestBody Course course) {
-    	return new ResponseEntity<>(this.courseService.update(course, id), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public Course update(@PathVariable(name = "course_id") Long id,
+                         @RequestBody Course course) {
+        return this.courseService.update(course, id);
     }
 
     @Operation(summary = "Delete a course")
@@ -70,9 +73,9 @@ public class CourseController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @DeleteMapping(path = "/{course_id}")
-    public ResponseEntity<Void> deleteById(@PathVariable(name = "course_id") Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable(name = "course_id") Long id) {
         this.courseService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Operation(summary = "Delete all courses")
@@ -80,8 +83,8 @@ public class CourseController {
             @ApiResponse(responseCode = "204", description = "No Content"),
     })
     @DeleteMapping
-    public ResponseEntity<Void> deleteAll() {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAll() {
         this.courseService.deleteAll();
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
