@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -50,11 +49,7 @@ public class DepartmentController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Department> save(@RequestBody Department department) {
-        try {
-            return new ResponseEntity<>(this.departmentService.save(department), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    	return new ResponseEntity<>(this.departmentService.save(department), HttpStatus.OK);
     }
 
     @Operation(summary = "Update a department")
@@ -66,11 +61,7 @@ public class DepartmentController {
     @PutMapping(path = "/{department_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Department> update(@PathVariable(name = "department_id") Long id,
                                              @RequestBody Department department) {
-        try {
-            return new ResponseEntity<>(this.departmentService.update(department, id), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    	return new ResponseEntity<>(this.departmentService.update(department, id), HttpStatus.OK);
     }
 
     @Operation(summary = "Delete a department")

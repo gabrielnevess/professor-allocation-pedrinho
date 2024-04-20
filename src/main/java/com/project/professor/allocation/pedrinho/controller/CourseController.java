@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -50,11 +49,7 @@ public class CourseController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Course> save(@RequestBody Course course) {
-        try {
-            return new ResponseEntity<>(this.courseService.save(course), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    	return new ResponseEntity<>(this.courseService.save(course), HttpStatus.OK);
     }
 
     @Operation(summary = "Update a course")
@@ -66,11 +61,7 @@ public class CourseController {
     @PutMapping(path = "/{course_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Course> update(@PathVariable(name = "course_id") Long id,
                                          @RequestBody Course course) {
-        try {
-            return new ResponseEntity<>(this.courseService.update(course, id), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    	return new ResponseEntity<>(this.courseService.update(course, id), HttpStatus.OK);
     }
 
     @Operation(summary = "Delete a course")

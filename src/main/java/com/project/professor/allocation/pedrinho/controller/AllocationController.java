@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -70,11 +69,7 @@ public class AllocationController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Allocation> save(@RequestBody Allocation allocation) {
-        try {
-            return new ResponseEntity<>(this.allocationService.save(allocation), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    	return new ResponseEntity<>(this.allocationService.save(allocation), HttpStatus.OK);
     }
 
     @Operation(summary = "Update a allocation")
@@ -86,11 +81,7 @@ public class AllocationController {
     @PutMapping(path = "/{allocation_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Allocation> update(@PathVariable(name = "allocation_id") Long id,
                                              @RequestBody Allocation allocation) {
-        try {
-            return new ResponseEntity<>(this.allocationService.update(allocation, id), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
+    	return new ResponseEntity<>(this.allocationService.update(allocation, id), HttpStatus.OK);
     }
 
     @Operation(summary = "Delete a allocation")
