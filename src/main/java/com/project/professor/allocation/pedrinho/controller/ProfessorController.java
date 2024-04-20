@@ -60,7 +60,7 @@ public class ProfessorController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Professor> save(@RequestBody Professor professor) {
-    	return new ResponseEntity<>(this.professorService.save(professor), HttpStatus.OK);
+    	return new ResponseEntity<>(this.professorService.save(professor), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update a professor")

@@ -49,7 +49,7 @@ public class DepartmentController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Department> save(@RequestBody Department department) {
-    	return new ResponseEntity<>(this.departmentService.save(department), HttpStatus.OK);
+    	return new ResponseEntity<>(this.departmentService.save(department), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update a department")

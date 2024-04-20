@@ -49,7 +49,7 @@ public class CourseController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Course> save(@RequestBody Course course) {
-    	return new ResponseEntity<>(this.courseService.save(course), HttpStatus.OK);
+    	return new ResponseEntity<>(this.courseService.save(course), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update a course")

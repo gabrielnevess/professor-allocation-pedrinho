@@ -69,7 +69,7 @@ public class AllocationController {
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Allocation> save(@RequestBody Allocation allocation) {
-    	return new ResponseEntity<>(this.allocationService.save(allocation), HttpStatus.OK);
+    	return new ResponseEntity<>(this.allocationService.save(allocation), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update a allocation")
