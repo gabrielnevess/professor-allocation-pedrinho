@@ -21,9 +21,9 @@ public class ProfessorService {
     }
 
     public Professor update(Professor professor, Long professorId) {
-    	if (Objects.isNull(professorId) || !professorRepository.existsById(professorId)) {
-    		throw new NotFoundException(String.format("Professor not found with id :: %d", professorId));
-    	}
+        if (Objects.isNull(professorId) || !this.professorRepository.existsById(professorId)) {
+            throw new NotFoundException(String.format("Professor not found with id :: %d", professorId));
+        }
 
         professor.setId(professorId);
         return this.saveInternal(professor);
@@ -32,7 +32,7 @@ public class ProfessorService {
     public List<Professor> findByDepartment(Long departmentId) {
         Department department = new Department();
         department.setId(departmentId);
-        return professorRepository.findByDepartment(department);
+        return this.professorRepository.findByDepartment(department);
     }
 
     public void deleteById(Long professorId) {
@@ -53,9 +53,8 @@ public class ProfessorService {
     public List<Professor> findAll(String name) {
         if (Objects.nonNull(name)) {
             return this.professorRepository.findByNameContainingIgnoreCase(name);
-        } else {
-            return this.professorRepository.findAll();
         }
+        return this.professorRepository.findAll();
     }
 
     private Professor saveInternal(Professor professor) {
@@ -65,13 +64,13 @@ public class ProfessorService {
             professor.setDepartment(department);
             this.professorRepository.save(professor);
             return professor;
-        } else {
-            Professor prof = this.findById(professor.getId());
-            prof.setName(professor.getName());
-            prof.setCpf(professor.getCpf());
-            prof.setDepartment(department);
-            this.professorRepository.save(prof);
-            return prof;
         }
+
+        Professor prof = this.findById(professor.getId());
+        prof.setName(professor.getName());
+        prof.setCpf(professor.getCpf());
+        prof.setDepartment(department);
+        this.professorRepository.save(prof);
+        return prof;
     }
 }

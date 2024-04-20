@@ -23,9 +23,9 @@ public class AllocationService {
     }
 
     public Allocation update(Allocation allocation, Long allocationId) {
-    	if (Objects.isNull(allocationId) || !allocationRepository.existsById(allocationId)) {
-    		throw new NotFoundException(String.format("Allocation not found with id :: %d", allocationId));
-    	}
+        if (Objects.isNull(allocationId) || !this.allocationRepository.existsById(allocationId)) {
+            throw new NotFoundException(String.format("Allocation not found with id :: %d", allocationId));
+        }
 
         allocation.setId(allocationId);
         return this.saveInternal(allocation);
@@ -34,13 +34,13 @@ public class AllocationService {
     public List<Allocation> findByCourse(Long courseId) {
         Course course = new Course();
         course.setId(courseId);
-        return allocationRepository.findByCourse(course);
+        return this.allocationRepository.findByCourse(course);
     }
 
     public List<Allocation> findByProfessor(Long professorId) {
         Professor professor = new Professor();
         professor.setId(professorId);
-        return allocationRepository.findByProfessor(professor);
+        return this.allocationRepository.findByProfessor(professor);
     }
 
     public void deleteById(Long allocationId) {
@@ -76,16 +76,16 @@ public class AllocationService {
             allocation.setCourse(course);
             this.allocationRepository.save(allocation);
             return allocation;
-        } else {
-            Allocation alloc = this.findById(allocation.getId());
-            alloc.setEndHour(allocation.getEndHour());
-            alloc.setStartHour(allocation.getStartHour());
-            alloc.setDayOfWeek(allocation.getDayOfWeek());
-            alloc.setProfessor(professor);
-            alloc.setCourse(course);
-            this.allocationRepository.save(alloc);
-            return alloc;
         }
+
+        Allocation alloc = this.findById(allocation.getId());
+        alloc.setEndHour(allocation.getEndHour());
+        alloc.setStartHour(allocation.getStartHour());
+        alloc.setDayOfWeek(allocation.getDayOfWeek());
+        alloc.setProfessor(professor);
+        alloc.setCourse(course);
+        this.allocationRepository.save(alloc);
+        return alloc;
     }
 
     private boolean isEndHourGreaterThanStartHour(Allocation allocation) {

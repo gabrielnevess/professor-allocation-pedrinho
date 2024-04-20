@@ -19,9 +19,9 @@ public class CourseService {
     }
 
     public Course update(Course course, Long courseId) {
-    	if (Objects.isNull(courseId) || !courseRepository.existsById(courseId)) {
-    		throw new NotFoundException(String.format("Course not found with id :: %d", courseId));
-    	}
+        if (Objects.isNull(courseId) || !this.courseRepository.existsById(courseId)) {
+            throw new NotFoundException(String.format("Course not found with id :: %d", courseId));
+        }
 
         course.setId(courseId);
         return this.saveInternal(course);
@@ -46,18 +46,17 @@ public class CourseService {
     public List<Course> findAll(String name) {
         if (Objects.nonNull(name)) {
             return this.courseRepository.findByNameContainingIgnoreCase(name);
-        } else {
-            return this.courseRepository.findAll();
         }
+        return this.courseRepository.findAll();
     }
 
     private Course saveInternal(Course course) {
         if (Objects.isNull(course.getId())) {
             return this.courseRepository.save(course);
-        } else {
-            Course cs = this.findById(course.getId());
-            cs.setName(course.getName());
-            return this.courseRepository.save(cs);
         }
+
+        Course cs = this.findById(course.getId());
+        cs.setName(course.getName());
+        return this.courseRepository.save(cs);
     }
 }
