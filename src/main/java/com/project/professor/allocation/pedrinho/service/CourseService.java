@@ -55,8 +55,7 @@ public class CourseService {
             return this.courseRepository.save(course);
         }
 
-        Course cs = this.findById(course.getId());
-        cs.setName(course.getName());
-        return this.courseRepository.save(cs);
+        course.setName(course.getName());
+        return this.courseRepository.save(course);
     }
 }

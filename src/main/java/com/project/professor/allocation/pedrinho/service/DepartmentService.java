@@ -56,8 +56,7 @@ public class DepartmentService {
             return this.departmentRepository.save(department);
         }
 
-        Department dpt = this.findById(department.getId());
-        dpt.setName(department.getName());
-        return this.departmentRepository.save(dpt);
+        department.setName(department.getName());
+        return this.departmentRepository.save(department);
     }
 }

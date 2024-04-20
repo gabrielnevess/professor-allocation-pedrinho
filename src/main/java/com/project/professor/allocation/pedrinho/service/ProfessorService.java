@@ -66,11 +66,10 @@ public class ProfessorService {
             return professor;
         }
 
-        Professor prof = this.findById(professor.getId());
-        prof.setName(professor.getName());
-        prof.setCpf(professor.getCpf());
-        prof.setDepartment(department);
-        this.professorRepository.save(prof);
-        return prof;
+        professor.setName(professor.getName());
+        professor.setCpf(professor.getCpf());
+        professor.setDepartment(department);
+        this.professorRepository.save(professor);
+        return professor;
     }
 }
